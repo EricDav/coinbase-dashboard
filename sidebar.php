@@ -2,7 +2,7 @@
 
 <!-- logo start -->
 <div class="logo">
-  <h3><a style="font-size: 20px;" href="index.html">WiseInvestments</a></h3>
+  <h3><a style="font-size: 20px;" href="index.html">BaseCoinInvestment</a></h3>
 </div>
 
 <!-- if logo is image enable this -->

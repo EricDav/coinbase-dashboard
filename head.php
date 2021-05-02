@@ -3,7 +3,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <title>Collective Admin Panel a Flat Bootstrap Responsive Website Template | Home :: W3Layouts</title>
+  <title>Basecoin Dashboard::Home</title>
 
   <!-- Template CSS -->
   <link rel="stylesheet" href="<?=$subPath .  '/assets/css/style-starter.css'?>">

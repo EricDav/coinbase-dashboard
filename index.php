@@ -174,6 +174,8 @@ if ($url == '/transactions') {
   exit;
 } else if ($url == '/logout') {
   include 'logout.php';
+} else {
+  looginGuide();
 }
 
   $totalAmountInvested = 0;

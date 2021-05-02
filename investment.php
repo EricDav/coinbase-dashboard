@@ -2,7 +2,7 @@
       <div class="row">
         <div class="col-lg-12 mb-4">
           <div class="card card_border p-4">
-            <h3 class="card__title">Your Investments</h3>
+            <h3 class="card__title"><?=$header?></h3>
             <div class="table-responsive">
               <div id="example_wrapper" class="dataTables_wrapper no-footer"><div class="dataTables_length" id="example_length"><label></label></div><table id="example" class="display dataTable no-footer" style="width: 100%;" role="grid" aria-describedby="example_info">
                 <thead>

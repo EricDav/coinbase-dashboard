@@ -19,7 +19,7 @@
             </a>
             <ul class="dropdown-menu drp-mnu" aria-labelledby="dropdownMenu3">
               <li class="user-info">
-                <h5 class="user-name"><?=$_SESSION['userInfo']['first_name']?></h5>
+                <h5 class="user-name"><?=$_SESSION['user']['name']?></h5>
                 <span class="status ml-2">Available</span>
               </li>
               <li> <a href="/profile"><i class="lnr lnr-user"></i>My Profile</a> </li>
