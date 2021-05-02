@@ -20,11 +20,14 @@
     if (!$errorMessage) {
         $existingUser = findUser(array('email' => $email));
         if (!$existingUser) {
-            $user = signup(array('email' => $email, 'password' => $password, 'name' => $name, 'date_created' => gmdate('Y-m-d\ H:i:s')));
+            $userData = array('email' => $email, 'password' => $password, 'name' => $name, 'date_created' => gmdate('Y-m-d\ H:i:s'));
+            $user = signup($userData);
             if (!$user) {
               $errorMessage = 'An unexpected error occurred';
             } else {
-              $_SESSION['user'] = $user;
+              $userData['id'] = $user;
+              $userData['is_admin'] = 0;
+              $_SESSION['user'] = $userData;
               header('Location: /');
             }
         } else {
