@@ -19,10 +19,10 @@
                 ),
         
                 'production' => array(
-                    'user' => 'wiseinve_investment',
-                    'password' => 'Iloveodunayo123',
+                    'user' => 'basecoi1_coinbase',
+                    'password' => 'coinbase123',
                     'host' => 'localhost',
-                    'database' => 'wiseinve_coinbase',
+                    'database' => 'basecoi1_coinbase',
                     'port' => 3306
                 )
             );
