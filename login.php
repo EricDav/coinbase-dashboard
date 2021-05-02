@@ -197,8 +197,11 @@ RIGHT SIDEBAR TOGGLE SECTION
 
     <!-- content -->
     <div class="">
+    <div style="margin-bottom: 0px !important;" class="login__header text-center mb-lg-5 mb-4">
+          <h3 class="login__title mb-2">BaseCoin Investment</h3>
+      </div>
         <!-- login form -->
-        <section class="login-form py-md-5 py-3">
+        <section class="login-form py-3">
             <div class="card card_border p-md-4">
                 <div class="card-body">
                     <!-- form -->
