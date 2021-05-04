@@ -71,10 +71,15 @@ $banks = array(
                         Your details updated successfully
                     </div>
                     <div class="form-row">
-                            <div class="form-group col-md-12">
+                            <div class="form-group col-md-6">
                                 <label for="inputEmail4" class="input__label">Full Name</label>
                                 <input type="text" class="form-control input-style" id="dfirstName" placeholder="First name" value="<?=$_SESSION['user']['name']?>">
                                 <span class="error-message" id="dfirstname-error"></span>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="inputEmail4" class="input__label">Referral Code</label>
+                                <input type="text" class="form-control input-style" id="dfirstName" placeholder="" value="<?=$_SESSION['user']['referral_code']?>" disabled>
                             </div>
                         </div>
                         <div class="form-row">

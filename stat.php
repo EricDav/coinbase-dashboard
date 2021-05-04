@@ -37,9 +37,8 @@
           <div class="row">
             <div class="col-sm-6 pr-sm-2 statistics-grid">
               <div class="card card_border border-primary-top p-4">
-                
-                <h3 class="text-success number"><?=('$ ' . getTotalAmountWithdrawn($details['transactions']))?></h3>
-                <p class="stat-text">Total Amount Withdrawn</p>
+                <h3 class="text-success number"><?=('$ ' . getAllReferalBonus())?></h3>
+                <p class="stat-text">Referral Bonus</p>
               </div>
             </div>
             <div class="col-sm-6 pl-sm-2 statistics-grid">

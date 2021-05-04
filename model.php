@@ -70,8 +70,6 @@
                 $whereClause = self::generateWhereClause($tableName, $whereParams, null, null, null, null);
                 $sql .= ' WHERE' . $whereClause['clause'];
 
-               // var_dump($sql); exit;
-
                 $stmt= $dbConnection->pdo->prepare($sql);
                 return $stmt->execute($whereClause['params']);
 
@@ -204,16 +202,16 @@
         //     }
         // }
 
-        // public static function getInvestments($dbConnection, $userId) {
-        //     try {
-        //         $sql = 'SELECT * FROM investments WHERE user_id='.$userId;
+        public static function getTransactions($dbConnection, $userId) {
+            try {
+                $sql = 'SELECT * FROM transactions WHERE user_id='.$userId . ' AND date_created <=' . '"' . gmdate('Y-m-d\ H:i:s') . '"';
 
-        //         $stmt= $dbConnection->pdo->query($sql);
-        //         return $stmt->fetchAll();
-        //     } catch(Exception $e) {
-        //         return false;
-        //     }
-        // }
+                $stmt= $dbConnection->pdo->query($sql);
+                return $stmt->fetchAll();
+            } catch(Exception $e) {
+                return false;
+            }
+        }
 
         // public static function getNextOfKin($dbConnection, $userId) {
         //     try {

@@ -3,29 +3,14 @@
  include 'controller.php';
    // var_dump($_SESSION); exit;
   function getMatureDate($dateCreated, $amount) {
-    $hours = 0;
-
-    if ($amount < 200) {
-        $hours = 24;
-    } else if ($amount >= 200 && $amount < 500) {
-        $hours = 48;
-    } else if ($amount > 500) {
-        $hours = 72;
-    }
-
+    $hours = 96;
     $maturedDate = date('Y-m-d H:m:s', strtotime("+" . $hours ." hours", strtotime($dateCreated)));
 
     return $maturedDate;
 }
 
 function getPercent($amount) {
-  if ($amount < 200) {
-      return 0.2;
-  } else if ($amount >= 200 && $amount < 500) {
-      return 0.5;
-  } else if ($amount > 500) {
-      return 1;
-  }
+  return getPlan($amount)['percent']/100;
 }
 
 function getTotalAmountInvested($investments) {
@@ -118,6 +103,7 @@ $details = isset($_SESSION['user']) ? getDashboardDetails($_SESSION['user']['id'
 $url = explode('?', $_SERVER['REQUEST_URI'])[0];
 if ($url == '/transactions') {
   looginGuide();
+  $transactions = $details['transactions'];
   $currentPage = 'Transactions';
   $header = 'All Transactions';
   include 'transactions.php';
@@ -141,7 +127,13 @@ if ($url == '/transactions') {
   $header = 'Withdraw Funds';
   include 'withdraw.php';
   exit;
-} else if ($url == '/users') {
+} else if ($url == '/plans') {
+  looginGuide();
+  $plans = getPlans();
+  $header = 'Investment Plans';
+  include 'plans.php';
+  exit;
+}  else if ($url == '/users') {
   adminGuide();
   $users = getUsers();
   $currentPage = 'users';

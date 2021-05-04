@@ -1,6 +1,6 @@
 <?php
   $errorMessage = null;
-  // var_dump($_POST); exit;
+  $REFFERAL_GEN = 'REFERRAL_GEN';
   if (sizeof($_POST) > 0) {
     $name = $_POST['name'];
     $password = isset($_POST['password']) ? sha1($_POST['password']) : '';
@@ -17,18 +17,26 @@
       $errorMessage =  $isValidEmail['message'];
     }
 
+    if (isset($_POST['referral_code']) && $_POST['referral_code'] && !ctype_alnum($_POST['referral_code'])) {
+      $errorMessage = 'Invalid referral code';
+    }
+
     if (!$errorMessage) {
         $existingUser = findUser(array('email' => $email));
         if (!$existingUser) {
-            $userData = array('email' => $email, 'password' => $password, 'name' => $name, 'date_created' => gmdate('Y-m-d\ H:i:s'));
-            $user = signup($userData);
-            if (!$user) {
+            $userData = array('email' => $email, 'password' => $password, 'name' => $name,
+            'date_created' => gmdate('Y-m-d\ H:i:s'), 'referral_code' => KeyGen::HashKey($email, $REFFERAL_GEN, 10));
+            $userId = signup($userData);
+            if (!$userId) {
               $errorMessage = 'An unexpected error occurred';
             } else {
-              $userData['id'] = $user;
+              if (isset($_POST['referral_code'])) {
+                addReferral(array('user_id' => $userId, 'referral_code' => $_POST['referral_code']));
+              }
+              $userData['id'] = $userId;
               $userData['is_admin'] = 0;
               $_SESSION['user'] = $userData;
-              header('Location: /');
+              header('Location: /plans');
             }
         } else {
             $errorMessage = 'User with the email already exists';
@@ -244,6 +252,10 @@ RIGHT SIDEBAR TOGGLE SECTION
                         <div class="form-group">
                             <label for="exampleInputPassword1" class="input__label">Password</label>
                             <input name="password" type="password" class="form-control login_text_field_bg input-style" id="exampleInputPassword1" placeholder="" required="" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAmJJREFUWAntV7uKIkEUvbYGM4KID3wEIgjKRLLpKGLgFwiCfslGhkb7IbLgAzE1GhMxWxRRBEEwmEgDERWfW6fXuttq60a2wU6B1qlzb9U5fatsKROJVigUArvd7oeAyePx6Af3qGYymT7F2h8Wi+V7Pp+fmE7iv4Sw81GieusKIzNh4puCJzdaHIagCW1F4KSeQ4O4pPLoPb/3INBGBZ7avgz8fxWIxWIUCoX43Blegbe3NwoGg88zwMoncFUB8Yokj8dDdrv9MpfHVquV/H4/iVcpc1qgKAp5vV6y2WxaWhefreB0OimXy6kGkD0YDKhSqdB2u+XJqVSK4vE4QWS5XKrx0WjEcZ/PR9lslhwOh8p1Oh2q1Wp0OBw4RwvOKpBOp1kcSdivZPLvmxrjRCKhiiOOSmQyGXp5ecFQbRhLcRDRaJTe39//BHW+2cDr6ysFAoGrlEgkwpwWS1I7z+VykdvtliHuw+Ew40vABvb7Pf6hLuMk/rGY02ImBZC8dqv04lpOYjaw2WzUPZcB2WMPZet2u1cmZ7MZTSYTNWU+n9N4PJbp3GvXYPIE2ADG9Xqder2e+kTr9ZqazSa1222eA6FqtUoQwqHCuFgscgWQWC6XaTgcEiqKQ9poNOiegbNfwWq1olKppB6yW6cWVcDHbDarIuzuBBaLhWrqVvwy/6wCMnhLXMbR4wnvtX/F5VxdAzJoRH+2BUYItlotmk6nLGW4gX6/z+IAT9+CLwPPr8DprnZ2MIwaQBsV+DBKUEfnQ8EtFRdFneBDKWhCW8EVGbdUQfxESR6qKhaHBrSgCe3fbLTpPlS70M0AAAAASUVORK5CYII=&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1" class="input__label">Referral Code</label>
+                            <input name="referral_code" type="text" class="form-control login_text_field_bg input-style" id="exampleInputPassword1" placeholder="">
                         </div>
                         <div class="form-check check-remember check-me-out">
                             <input  type="checkbox" class="form-check-input checkbox" id="exampleCheck1">

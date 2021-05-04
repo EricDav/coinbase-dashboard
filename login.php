@@ -14,7 +14,7 @@
       $errorMessage = 'Invalid username or password';
     } else {
       $_SESSION['user'] = $user;
-      header('Location: /');
+      header('Location: /plans');
     }
 
   }

@@ -42,10 +42,15 @@
 
       <div class="card-body">
           <div class="form-row">
-              <div class="form-group col-md-6">Make a bitcoin deposit to the wallet address below. After successfull payment send mail us at <strong>info@basecoininvest.co</strong> or send a whatsapp message <strong>+1 424 209 4088</strong> with your email address and the details of your transfer</div>
+              <div class="form-group col-md-6">Make a bitcoin deposit to the wallet address below or a wire transfer. After successfull payment send mail us at <strong>info@basecoininvest.co</strong> or send a whatsapp message <strong>+1 424 209 4088</strong> with your email address and the details of your transfer</div>
               
           </div>
           <div><b>Bitcoin Address:  </b>  18skmQBU9bkvHpWM7XpmWiZrKfPGpfN6YW</div>
+          <div style="margin-top: 20px;"><b>Wire Transfer</b></div>
+          <div>Bank Name: Chase Bank<br>
+            Account Holder: Crystal Morris Crenshaw<br>
+            Account Number: 749157605<br>
+            Routing Number: 021000021</div>
       </div>
     </div>
 

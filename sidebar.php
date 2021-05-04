@@ -28,6 +28,7 @@
     <li><a href="/investments"><i class="fa fa-table"></i> <span>Investments</span></a></li>
     <li><a href="/transactions"><i class="fa fa-th"></i> <span>Transactions</span></a></li>
     <li><a href="/profile"><i class="fa fa-user"></i> <span>My Profile</span></a></li>
+    <li><a href="/plans"><i class="fa fa-bars"></i> <span>Investment Plans</span></a></li>
     <li><a href="/withdraw"><i class="fa fa-money"></i> <span>Withdraw | Deposit</span></a></li>
     <?php if (isAdmin()): ?> 
       <li><a href="/users"><i class="fa fa-users"></i> <span>Users</span></a></li>
