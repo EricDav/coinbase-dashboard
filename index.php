@@ -75,7 +75,7 @@ function getFirst10Transactions($transactions) {
 }
 
 function isAdmin() {
-  return isset($_SESSION['user']) && $_SESSION['user']['id'] == 1;
+  return isset($_SESSION['user']) && $_SESSION['user']['isAdmin'] == 1;
 }
 
 function isLogin() {
