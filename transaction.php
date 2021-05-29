@@ -26,9 +26,9 @@
                     
                     <tr role="row" class="odd">
                         <td class=""><?=($transaction['transaction_type'] == 0 ? 'Debit (withdrawal)' : ( $transaction['transaction_type'] == 1 ?'Credit (investment)' : 'Credit (referral bonus)'))?></td>
-                        <td class="sorting_1"><?=$transaction['amount']?></td>
+                        <td class="sorting_1"><?=number_format($transaction['amount'], 2)?></td>
                         <td><?=(explode(" ", $transaction['date_created'])[0])?></td>
-                        <td><span class="badge badge-success"><?=$transaction['balance']?></span></td>
+                        <td><span class="badge badge-success"><?=number_format($transaction['balance'], 2)?></span></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>

@@ -27,7 +27,7 @@
             <div class="col-sm-6 pl-sm-2 statistics-grid">
               <div class="card card_border border-primary-top p-4">
                 
-                <h3 class="text-secondary number"><?=('$ ' . getTotalAmountInvested($details['investments']))?></h3>
+                <h3 class="text-secondary number"><?=('$ ' . number_format(getTotalAmountInvested($details['investments']), 2))?></h3>
                 <p class="stat-text">Total Amount Invested</p>
               </div>
             </div>
@@ -37,14 +37,14 @@
           <div class="row">
             <div class="col-sm-6 pr-sm-2 statistics-grid">
               <div class="card card_border border-primary-top p-4">
-                <h3 class="text-success number"><?=('$ ' . getAllReferalBonus())?></h3>
+                <h3 class="text-success number"><?=('$ ' . number_format(getAllReferalBonus(), 2))?></h3>
                 <p class="stat-text">Referral Bonus</p>
               </div>
             </div>
             <div class="col-sm-6 pl-sm-2 statistics-grid">
               <div class="card card_border border-primary-top p-4">
                 
-                <h3 class="text-danger number"><?=('$ ' . getBalance($details['transactions'], $details['investments']))?></h3>
+                <h3 class="text-danger number"><?=('$ ' . number_format(getBalance($details['transactions'], $details['investments']), 2))?></h3>
                 <p class="stat-text">Available balance</p>
               </div>
             </div>

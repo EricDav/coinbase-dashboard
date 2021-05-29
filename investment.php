@@ -16,9 +16,9 @@
                 <tbody>
                 <?php foreach($investments as $investment): ?>
                     <tr role="row" class="odd">
-                        <td class="">$ <?=$investment['amount']?></td>
-                        <td class="sorting_1">$ <?=getProfit($investment)?></td>
-                        <td>$ <?=getSingleBalance($investment)?></td>
+                        <td class="">$ <?=number_format($investment['amount'], 2)?></td>
+                        <td class="sorting_1">$ <?=number_format(getProfit($investment), 2)?></td>
+                        <td>$ <?=number_format(getSingleBalance($investment), 2)?></td>
                         <td><span class="badge badge-success"><?=getMatureDate($investment['date_created'], $investment['amount'])?></span></td>
                     </tr>
                 <?php endforeach; ?>
