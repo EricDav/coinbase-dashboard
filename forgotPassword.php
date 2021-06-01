@@ -13,7 +13,7 @@
       $errorMessage = 'Email not associated with any account';
     } else {
         $token = sha1(gmdate('Y-m-d\ H:i:s') . $username);
-        $link = $_SERVER['HTTP_HOST'] == 'localhost:8888' ? 'http://localhost:8888/reset-password?t=' .$token : 'http://basecoininvest.co/reset-password?t=' .$token;
+        $link = $_SERVER['HTTP_HOST'] == 'localhost:8888' ? 'http://localhost:8888/reset-password?t=' .$token : 'http://dashboard.basecoininvest.co/reset-password?t=' .$token;
         $message = "<h3>Hello <br>" . $user['name'] . ", </h3><br>";
         $message.= "<p>You requested for password reset, kindly click on the link below to reset your password.</p><br>";
         $message.='<p><a target="_blank"  href='  . "'" . $link . "'" . ">Reset password</a></p>";
@@ -211,9 +211,6 @@ RIGHT SIDEBAR TOGGLE SECTION
             <div class="card card_border p-md-4">
                 <div class="card-body">
                     <!-- form -->
-                    <?php if ($errorMessage): ?>
-                        <div id="m-success" class="alert alert-danger" role="alert"><?=$errorMessage?></div>
-                    <?php endif; ?>
                     <form method="POST" _lpchecked="1">
                         <div class="login__header text-center mb-lg-5 mb-4">
                             <h3 class="login__title mb-2">Forgot Password</h3>
