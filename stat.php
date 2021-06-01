@@ -27,8 +27,8 @@
             <div class="col-sm-6 pl-sm-2 statistics-grid">
               <div class="card card_border border-primary-top p-4">
                 
-                <h3 class="text-secondary number"><?=('$ ' . number_format(getTotalAmountInvested($details['investments']), 2))?></h3>
-                <p class="stat-text">Total Amount Invested</p>
+                <h3 class="text-secondary number"><?=('$ ' . number_format(getBalance($details['transactions'], $details['investments']), 2))?></h3>
+                <p class="stat-text">Total Balance</p>
               </div>
             </div>
           </div>
@@ -43,9 +43,8 @@
             </div>
             <div class="col-sm-6 pl-sm-2 statistics-grid">
               <div class="card card_border border-primary-top p-4">
-                
-                <h3 class="text-danger number"><?=('$ ' . number_format(getBalance($details['transactions'], $details['investments']), 2))?></h3>
-                <p class="stat-text">Available balance</p>
+                <h3 class="text-danger number"><?=('$ ' . number_format(getWithdrawableBalance($details['transactions'], $details['investments']), 2))?></h3>
+                <p class="stat-text">Profit</p>
               </div>
             </div>
           </div>

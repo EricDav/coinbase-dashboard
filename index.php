@@ -63,6 +63,20 @@ function getBalance($transactions, $investments) {
   return $maturedInvestments - $amountWithdrawn;
 }
 
+function getWithdrawableBalance($transactions, $investments) {
+  $amountWithdrawn = getTotalAmountWithdrawn($transactions);
+
+  $maturedInvestments = 0;
+  foreach($investments as $investment) {
+    if (gmdate('Y-m-d\ H:i:s') > getMatureDate($investment['date_created'], $investment['amount'])) {
+      $maturedInvestments+=($investment['amount'] * getPercent($investment['amount']));
+    }
+  }
+
+  return $maturedInvestments - $amountWithdrawn;
+}
+
+
 
 function getFirst10Transactions($transactions) {
   $newTransactions = array();
@@ -164,8 +178,29 @@ if ($url == '/transactions') {
   }
   include 'signup.php';
   exit;
+}  else if ($url == '/forgot-password') {
+  if (isset($_SESSION['user'])) {
+    header('Location: /');
+  }
+  include 'forgotPassword.php';
+  exit;
+} else if ($url == '/reset-password') {
+  if (isset($_SESSION['user'])) {
+    header('Location: /');
+  }
+  include 'passwordReset.php';
+  exit;
 } else if ($url == '/logout') {
   include 'logout.php';
+} else if ($url == '/requests') {
+  adminGuide();
+  $requests = getRequests();
+  $header = 'Withdrawal Request';
+  include 'requests.php';
+  exit;
+}  else if ($url == '/withdrawFunds') {
+  looginGuide();
+  withdrawFunds($details);
 } else {
   looginGuide();
 }

@@ -1,20 +1,26 @@
 <?php
   $errorMessage = null;
   // var_dump($_POST); exit;
-  if (sizeof($_POST) > 0) {
-    $username = $_POST['username'];
-    $password = isset($_POST['password']) ? sha1($_POST['password']) : '';
+  if (sizeof($_POST) > 0 && isset($_POST['password']) && isset($_POST['password']) && isset($_GET['t'])) {
+    $password = $_POST['password'];
+    $rPassword = $_POST['r_password'];
 
-    if (!$username) {
-      $errorMessage = 'Username is required';
-    }
-
-    $user = login($username, $password);
-    if (!$user) {
-      $errorMessage = 'Invalid username or password';
+    if ($password != $rPassword) {
+        $errorMessage = 'Password does not match';
     } else {
-      $_SESSION['user'] = $user;
-      header('Location: /plans');
+        $password = isset($_POST['password']) ? sha1($_POST['password']) : '';
+        if (!$password) {
+          $errorMessage = 'Password is required';
+        } else {
+            $user = findUser(array('token' => $_GET['t']));
+            if ($user) {
+                resetPassword($user['id'], $password);
+                updateToken($user['id'], null);
+                header('Location: /login');
+            } else {
+                $errorMessage = 'Link has been broken';
+            }
+        }
     }
 
   }
@@ -204,36 +210,29 @@ RIGHT SIDEBAR TOGGLE SECTION
         <section class="login-form py-3">
             <div class="card card_border p-md-4">
                 <div class="card-body">
-                    <!-- form -->
-                    <?php if ($errorMessage): ?>
+                    <form method="POST" _lpchecked="1">
+                        <div class="login__header text-center mb-lg-5 mb-4">
+                            <h3 class="login__title mb-2">Reset Password</h3>
+                        </div>
+                        <?php if ($errorMessage): ?>
                         <div id="m-success" class="alert alert-danger" role="alert"><?=$errorMessage?></div>
                     <?php endif; ?>
-                    <form action="/login" method="POST" _lpchecked="1">
-                        <div class="login__header text-center mb-lg-5 mb-4">
-                            <h3 class="login__title mb-2"> Login</h3>
-                            <p>Welcome back, login to continue</p>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1" class="input__label">New Password</label>
+                            <input name="password" type="password" class="form-control login_text_field_bg input-style" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="" required="" autofocus="" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAmJJREFUWAntV7uKIkEUvbYGM4KID3wEIgjKRLLpKGLgFwiCfslGhkb7IbLgAzE1GhMxWxRRBEEwmEgDERWfW6fXuttq60a2wU6B1qlzb9U5fatsKROJVigUArvd7oeAyePx6Af3qGYymT7F2h8Wi+V7Pp+fmE7iv4Sw81GieusKIzNh4puCJzdaHIagCW1F4KSeQ4O4pPLoPb/3INBGBZ7avgz8fxWIxWIUCoX43Blegbe3NwoGg88zwMoncFUB8Yokj8dDdrv9MpfHVquV/H4/iVcpc1qgKAp5vV6y2WxaWhefreB0OimXy6kGkD0YDKhSqdB2u+XJqVSK4vE4QWS5XKrx0WjEcZ/PR9lslhwOh8p1Oh2q1Wp0OBw4RwvOKpBOp1kcSdivZPLvmxrjRCKhiiOOSmQyGXp5ecFQbRhLcRDRaJTe39//BHW+2cDr6ysFAoGrlEgkwpwWS1I7z+VykdvtliHuw+Ew40vABvb7Pf6hLuMk/rGY02ImBZC8dqv04lpOYjaw2WzUPZcB2WMPZet2u1cmZ7MZTSYTNWU+n9N4PJbp3GvXYPIE2ADG9Xqder2e+kTr9ZqazSa1222eA6FqtUoQwqHCuFgscgWQWC6XaTgcEiqKQ9poNOiegbNfwWq1olKppB6yW6cWVcDHbDarIuzuBBaLhWrqVvwy/6wCMnhLXMbR4wnvtX/F5VxdAzJoRH+2BUYItlotmk6nLGW4gX6/z+IAT9+CLwPPr8DprnZ2MIwaQBsV+DBKUEfnQ8EtFRdFneBDKWhCW8EVGbdUQfxESR6qKhaHBrSgCe3fbLTpPlS70M0AAAAASUVORK5CYII=&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;">
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputEmail1" class="input__label">Username</label>
-                            <input name="username" type="text" class="form-control login_text_field_bg input-style" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="" required="" autofocus="" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAmJJREFUWAntV7uKIkEUvbYGM4KID3wEIgjKRLLpKGLgFwiCfslGhkb7IbLgAzE1GhMxWxRRBEEwmEgDERWfW6fXuttq60a2wU6B1qlzb9U5fatsKROJVigUArvd7oeAyePx6Af3qGYymT7F2h8Wi+V7Pp+fmE7iv4Sw81GieusKIzNh4puCJzdaHIagCW1F4KSeQ4O4pPLoPb/3INBGBZ7avgz8fxWIxWIUCoX43Blegbe3NwoGg88zwMoncFUB8Yokj8dDdrv9MpfHVquV/H4/iVcpc1qgKAp5vV6y2WxaWhefreB0OimXy6kGkD0YDKhSqdB2u+XJqVSK4vE4QWS5XKrx0WjEcZ/PR9lslhwOh8p1Oh2q1Wp0OBw4RwvOKpBOp1kcSdivZPLvmxrjRCKhiiOOSmQyGXp5ecFQbRhLcRDRaJTe39//BHW+2cDr6ysFAoGrlEgkwpwWS1I7z+VykdvtliHuw+Ew40vABvb7Pf6hLuMk/rGY02ImBZC8dqv04lpOYjaw2WzUPZcB2WMPZet2u1cmZ7MZTSYTNWU+n9N4PJbp3GvXYPIE2ADG9Xqder2e+kTr9ZqazSa1222eA6FqtUoQwqHCuFgscgWQWC6XaTgcEiqKQ9poNOiegbNfwWq1olKppB6yW6cWVcDHbDarIuzuBBaLhWrqVvwy/6wCMnhLXMbR4wnvtX/F5VxdAzJoRH+2BUYItlotmk6nLGW4gX6/z+IAT9+CLwPPr8DprnZ2MIwaQBsV+DBKUEfnQ8EtFRdFneBDKWhCW8EVGbdUQfxESR6qKhaHBrSgCe3fbLTpPlS70M0AAAAASUVORK5CYII=&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;">
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputPassword1" class="input__label">Password</label>
-                            <input name="password" type="password" class="form-control login_text_field_bg input-style" id="exampleInputPassword1" placeholder="" required="" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAmJJREFUWAntV7uKIkEUvbYGM4KID3wEIgjKRLLpKGLgFwiCfslGhkb7IbLgAzE1GhMxWxRRBEEwmEgDERWfW6fXuttq60a2wU6B1qlzb9U5fatsKROJVigUArvd7oeAyePx6Af3qGYymT7F2h8Wi+V7Pp+fmE7iv4Sw81GieusKIzNh4puCJzdaHIagCW1F4KSeQ4O4pPLoPb/3INBGBZ7avgz8fxWIxWIUCoX43Blegbe3NwoGg88zwMoncFUB8Yokj8dDdrv9MpfHVquV/H4/iVcpc1qgKAp5vV6y2WxaWhefreB0OimXy6kGkD0YDKhSqdB2u+XJqVSK4vE4QWS5XKrx0WjEcZ/PR9lslhwOh8p1Oh2q1Wp0OBw4RwvOKpBOp1kcSdivZPLvmxrjRCKhiiOOSmQyGXp5ecFQbRhLcRDRaJTe39//BHW+2cDr6ysFAoGrlEgkwpwWS1I7z+VykdvtliHuw+Ew40vABvb7Pf6hLuMk/rGY02ImBZC8dqv04lpOYjaw2WzUPZcB2WMPZet2u1cmZ7MZTSYTNWU+n9N4PJbp3GvXYPIE2ADG9Xqder2e+kTr9ZqazSa1222eA6FqtUoQwqHCuFgscgWQWC6XaTgcEiqKQ9poNOiegbNfwWq1olKppB6yW6cWVcDHbDarIuzuBBaLhWrqVvwy/6wCMnhLXMbR4wnvtX/F5VxdAzJoRH+2BUYItlotmk6nLGW4gX6/z+IAT9+CLwPPr8DprnZ2MIwaQBsV+DBKUEfnQ8EtFRdFneBDKWhCW8EVGbdUQfxESR6qKhaHBrSgCe3fbLTpPlS70M0AAAAASUVORK5CYII=&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;">
-                        </div>
-                        <div class="form-check check-remember check-me-out">
-                            <input  type="checkbox" class="form-check-input checkbox" id="exampleCheck1">
-                            <label class="form-check-label checkmark" for="exampleCheck1">Remember
-                                me</label>
+                            <label for="exampleInputPassword1" class="input__label">Repeat Password</label>
+                            <input name="r_password" type="password" class="form-control login_text_field_bg input-style" id="exampleInputPassword1" placeholder="" required="" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAmJJREFUWAntV7uKIkEUvbYGM4KID3wEIgjKRLLpKGLgFwiCfslGhkb7IbLgAzE1GhMxWxRRBEEwmEgDERWfW6fXuttq60a2wU6B1qlzb9U5fatsKROJVigUArvd7oeAyePx6Af3qGYymT7F2h8Wi+V7Pp+fmE7iv4Sw81GieusKIzNh4puCJzdaHIagCW1F4KSeQ4O4pPLoPb/3INBGBZ7avgz8fxWIxWIUCoX43Blegbe3NwoGg88zwMoncFUB8Yokj8dDdrv9MpfHVquV/H4/iVcpc1qgKAp5vV6y2WxaWhefreB0OimXy6kGkD0YDKhSqdB2u+XJqVSK4vE4QWS5XKrx0WjEcZ/PR9lslhwOh8p1Oh2q1Wp0OBw4RwvOKpBOp1kcSdivZPLvmxrjRCKhiiOOSmQyGXp5ecFQbRhLcRDRaJTe39//BHW+2cDr6ysFAoGrlEgkwpwWS1I7z+VykdvtliHuw+Ew40vABvb7Pf6hLuMk/rGY02ImBZC8dqv04lpOYjaw2WzUPZcB2WMPZet2u1cmZ7MZTSYTNWU+n9N4PJbp3GvXYPIE2ADG9Xqder2e+kTr9ZqazSa1222eA6FqtUoQwqHCuFgscgWQWC6XaTgcEiqKQ9poNOiegbNfwWq1olKppB6yW6cWVcDHbDarIuzuBBaLhWrqVvwy/6wCMnhLXMbR4wnvtX/F5VxdAzJoRH+2BUYItlotmk6nLGW4gX6/z+IAT9+CLwPPr8DprnZ2MIwaQBsV+DBKUEfnQ8EtFRdFneBDKWhCW8EVGbdUQfxESR6qKhaHBrSgCe3fbLTpPlS70M0AAAAASUVORK5CYII=&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;">
                         </div>
                         <div class="d-flex align-items-center flex-wrap justify-content-between">
-                            <button type="submit" class="btn btn-primary btn-style mt-4">Login now</button>
-                            <p class="signup mt-4">I can't remeber my password? <a href="/forgot-password" class="signuplink">Forget password
+                            <button type="submit" class="btn btn-primary btn-style mt-4">Reset now</button>
+                            <p class="signup mt-4">I can't remeber my password? <a href="/signup" class="signuplink">Forget password
                                     </a></p>
                         </div>
                     </form>
                     <!-- //form -->
-                    <p class="backtohome mt-4"><a href="index.html" class="back"><i class="fa fa-chevron-left" aria-hidden="true"></i>Back to Home </a></p>
+                    <p class="backtohome mt-4"><a href="/login" class="back"><i class="fa fa-chevron-left" aria-hidden="true"></i>Back to Login </a></p>
                 </div>
             </div>
         </section>

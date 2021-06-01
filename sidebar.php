@@ -33,6 +33,11 @@
     <?php if (isAdmin()): ?> 
       <li><a href="/users"><i class="fa fa-users"></i> <span>Users</span></a></li>
     <?php endif; ?>
+
+    <?php if (isAdmin()): ?> 
+      <li><a href="/requests"><i class="fa fa-bars"></i> <span>Withdrawal Requests</span></a></li>
+    <?php endif; ?>
+    
   </ul>
   <!-- //sidebar nav end -->
   <!-- toggle button start -->

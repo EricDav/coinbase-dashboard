@@ -4,7 +4,26 @@
     include 'connection.php';
     include 'customrand.php';
     include 'keygen.php';
+    include 'SendMail.php';
+    $INVESTMENT_TYPE = 1;
+    $REFERRAL_BONUS_TYPE = 2;
+    $PROFIT_TYPE = 3;
 
+    function getDescription($status) {
+        if ($status == $INVESTMENT_TYPE) {
+            return 'Investment deposit';
+        }
+
+        if ($status == $INVESTMENT_TYPE) {
+            return 'Referal Bonus';
+        }
+
+        if ($status == $PROFIT_TYPE) {
+            return 'Return from investment or profit';
+        }
+
+        return 'Nill';
+    }
 
     function getUser($id) {
         $pdo = (object)['pdo' => DBConnection::getDB()];
@@ -60,33 +79,48 @@
         return array('transactions' => $newTransactions, 'investments' => $investments);
     }
 
-    function withdrawFunds() {
+    function withdrawFunds($details) {
         $pdo = (object)['pdo' => DBConnection::getDB()];
-        $id = $_SESSION['userInfo']['id'];
+        $id = $_SESSION['user']['id'];
+        // echo $_POST['amount']; exit;
+        // $details = isset($_SESSION['user']) ? getDashboardDetails($_SESSION['user']['id']) : null;
+        // var_dump($details); exit;
 
         if (!is_numeric($_POST['amount'])) {
             Helper::jsonResponse(array('success' => false, 'message' => 'Invalid amount'));
         }
 
-        $balance = getBalance($details['transactions'], $details['investments']);
+        $balance = number_format(getWithdrawableBalance($details['transactions'], $details['investments']), 2);
+       // echo $balance; exit;
 
         if ($_POST['amount'] > $balance) {
-            Helper::jsonResponse(array('success' => false, 'message' => 'Insufficient balance'));
+            Helper::jsonResponse(array('success' => false, 'message' => 'Insufficient balance, you can only withdraw your profit'));
         }
 
         $result = Model::create($pdo, array('amount' => $_POST['amount'], 'transaction_type' => 0, 'status' => 1, 
-                        'date_created' => date('d-m-y h:i:s'), 'user_id' => $id), 'transactions');
+                        'date_created' => gmdate('Y-m-d\ H:i:s'), 'user_id' => $id), 'transactions');
 
-
-            
-        
-        
-        if ($result) {
-            Model::create($pdo, array('user_id' => $id, 'amount' => $_POST['amount']));
+       
+            Model::create($pdo, array('user_id' => $id, 'name' => $_SESSION['user']['name'], 'date_created' => gmdate('Y-m-d\ H:i:s'), 'transaction_id' => $result, 'status' => 1, 'wallet' => $_POST['wallet'], 'amount' => $_POST['amount']), 'withdrawal_request');
             Helper::jsonResponse(array('success' => true, 'message' => 'Your wthdrawal request submitted successfully'));
-        }
+        // }
 
         Helper::jsonResponse(array('success' => false, 'message' => 'Server error'));
+    }
+
+    function getRequests() {
+        $pdo = (object)['pdo' => DBConnection::getDB()];
+        $requests =  Model::find($pdo, array('status' => 1), 'withdrawal_request');
+
+        return $requests;
+    }
+
+    function confirmRequest() {
+        $pdo = (object)['pdo' => DBConnection::getDB()];
+
+        Model::update($pdo, array('status' => 2), array('id' => $_GET['t_id']), 'transactions');
+        Model::update($pdo, array('status' => 2), array('id' => $_GET['w']), 'withdrawal_request');
+        header('Location: /requests');
     }
 
     function getAccountDetails() {
@@ -171,14 +205,15 @@
         $plan = getPlan($data['amount']);
         $originalAmount = $data['amount'];
 
-        $hours = 96;
-        $date = date('Y-m-d H:m', strtotime("+" . $hours ." hours", strtotime(gmdate('Y-m-d\ H:i:s'))));
-        $data['transaction_type'] = 1;
-        $data['status'] = 2;
-        $data['date_created'] = $date;
-        $data['amount'] = $data['amount'] + ($data['amount'] * ($plan['percent']/100));
-        
-        $transaction = Model::create($pdo, $data, 'transactions');
+        for ($i = 0; $i < 2; $i++) {
+            $hours = ((int)$plan['time_frame'] * 24) + 24;
+            $date = date('Y-m-d H:m', strtotime("+" . $hours ." hours", strtotime(gmdate('Y-m-d\ H:i:s'))));
+            $data['transaction_type'] = $i == 0 ? $INVESTMENT_TYPE : $PROFIT_TYPE;
+            $data['status'] = 2;
+            $data['date_created'] = $date;
+            $data['amount'] = $i == 0 ? $data['amount'] : ($data['amount'] * ($plan['percent']/100));
+            $transaction = Model::create($pdo, $data, 'transactions');
+        }
         if ($investment) {
             // Adding referrals
             addReferralBonus($pdo, $data['user_id'], $originalAmount);
@@ -235,5 +270,15 @@
         }
 
         return $bonuses;
+    }
+    function updateToken($userId, $token) {
+        $pdo = (object)['pdo' => DBConnection::getDB()];
+        Model::update($pdo, array('token' => $token), array('id' => $userId), 'users');
+        return true;
+    }
+
+    function resetPassword($userId, $password) {
+        $pdo = (object)['pdo' => DBConnection::getDB()];
+        Model::update($pdo, array('password' => $password), array('id' => $userId), 'users');
     }
 ?>

@@ -1,11 +1,12 @@
 
-var amount = $('#withdraw');
+var amount = $('#amount');
+var wallet = $('#wallet');
 $('#withdraw-funds').click(function() {
-    if (amount.val()) {
+    if (amount.val() && wallet.val()) {
         $('#withdraw-funds').css('disabled', true);
         $('#withdraw-funds').css('cursor', 'default');
         $('#withdraw-funds').text('Updating..');
-        $.ajax('/withdrawFunds', { data: {amount: amount.val()},
+        $.ajax('/withdrawFunds', { data: {amount: amount.val(), wallet: wallet.val()},
         type: 'POST',  success: function(result) {
             $('#withdraw-funds').css('disabled', false);
             $('#withdraw-funds').text('Submit');

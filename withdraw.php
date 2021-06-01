@@ -66,14 +66,18 @@
                     <div id="m-failure" class="alert alert-danger success-message" role="alert">
                         
                     </div>
-                    <div class="form-row">
+                   
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="inputEmail4" class="input__label">Enter Wallet</label>
+                                <input type="text" name="wallet" class="form-control input-style" id="wallet" placeholder="Wallet" required>
+                            </div>
                             <div class="form-group col-md-6">
                                 <label for="inputEmail4" class="input__label">Amount</label>
-                                <input type="number" class="form-control input-style" id="withdraw" placeholder="Amount" required>
+                                <input type="number" name="amount" class="form-control input-style" id="amount" placeholder="Amount" required>
                             </div>
                         </div>
                         <button id="withdraw-funds" type="submit" class="btn btn-primary btn-style mt-4">Submit</button>
-                    
                 </div>
             </div>
 
@@ -92,7 +96,7 @@
   <span class="fa fa-angle-up"></span>
 </button>
 <?php include 'script.php'; ?>
-<script src="<?=$subPath . '/assets/js/w.js'?>"></script>
+<script src="<?=$subPath . '/assets/js/w.js?v=3'?>"></script>
 </body>
 
 </html>
