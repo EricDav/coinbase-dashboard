@@ -209,7 +209,7 @@
         $originalAmount = $data['amount'];
 
         for ($i = 0; $i < 2; $i++) {
-            $hours = ((int)$plan['time_frame'] * 24) + 24;
+            $hours = ((int)$plan['time_frame'] * 24);
             $date = date('Y-m-d H:m', strtotime("+" . $hours ." hours", strtotime(gmdate('Y-m-d\ H:i:s'))));
             $data['transaction_type'] = $i == 0 ? $INVESTMENT_TYPE : $PROFIT_TYPE;
             $data['status'] = 2;
