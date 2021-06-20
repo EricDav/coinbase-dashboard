@@ -5,11 +5,11 @@
     include 'customrand.php';
     include 'keygen.php';
     include 'SendMail.php';
-    $INVESTMENT_TYPE = 1;
-    $REFERRAL_BONUS_TYPE = 2;
-    $PROFIT_TYPE = 3;
 
     function getDescription($status) {
+        $INVESTMENT_TYPE = 1;
+        $REFERRAL_BONUS_TYPE = 2;
+        $PROFIT_TYPE = 3;
         if ($status == $INVESTMENT_TYPE) {
             return 'Investment deposit';
         }
@@ -200,6 +200,9 @@
     }
 
     function addInvestment($data) {
+        $INVESTMENT_TYPE = 1;
+        $REFERRAL_BONUS_TYPE = 2;
+        $PROFIT_TYPE = 3;
         $pdo = (object)['pdo' => DBConnection::getDB()];
         $investment = Model::create($pdo, $data, 'investments');
         $plan = getPlan($data['amount']);
